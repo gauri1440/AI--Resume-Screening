@@ -16,26 +16,45 @@ public class ResumeScreeningService {
             Resume resume,
             JobRequirement jobRequirement) {
 
-        Set<String> resumeSkills = new HashSet<>(
-                Arrays.asList(resume.getSkills().toLowerCase().split(","))
-        );
+        Set<String> resumeSkills = convertToSet(resume.getSkills());
 
-        Set<String> requiredSkills = new HashSet<>(
-                Arrays.asList(jobRequirement.getRequiredSkills().toLowerCase().split(","))
-        );
+        Set<String> mandatorySkills =
+                convertToSet(jobRequirement.getMandatorySkills());
 
-        int matchedSkills = 0;
+        Set<String> requiredSkills =
+                convertToSet(jobRequirement.getRequiredSkills());
 
-        for (String skill : requiredSkills) {
+        Set<String> preferredSkills =
+                convertToSet(jobRequirement.getPreferredSkills());
 
-            skill = skill.trim();
+        int mandatoryMatched = countMatched(resumeSkills, mandatorySkills);
+        int requiredMatched = countMatched(resumeSkills, requiredSkills);
+        int preferredMatched = countMatched(resumeSkills, preferredSkills);
 
-            if (resumeSkills.contains(skill)) {
-                matchedSkills++;
-            }
+        // Mandatory skill missing → Not shortlisted
+        if (mandatoryMatched < mandatorySkills.size()) {
+
+            return new ScreeningResult(
+                    resume.getName(),
+                    0,
+                    "NOT SHORTLISTED",
+                    mandatoryMatched,
+                    requiredMatched,
+                    preferredMatched
+            );
         }
 
-        double score = ((double) matchedSkills / requiredSkills.size()) * 100;
+        // Required skills score
+        double requiredScore = requiredSkills.isEmpty()
+                ? 0
+                : ((double) requiredMatched / requiredSkills.size()) * 70;
+
+        // Preferred skills bonus
+        double preferredScore = preferredSkills.isEmpty()
+                ? 0
+                : ((double) preferredMatched / preferredSkills.size()) * 30;
+
+        double score = requiredScore + preferredScore;
 
         String status = score >= 70
                 ? "SHORTLISTED"
@@ -44,7 +63,42 @@ public class ResumeScreeningService {
         return new ScreeningResult(
                 resume.getName(),
                 score,
-                status
+                status,
+                mandatoryMatched,
+                requiredMatched,
+                preferredMatched
         );
+    }
+
+    private Set<String> convertToSet(String skills) {
+
+        if (skills == null || skills.isBlank()) {
+            return new HashSet<>();
+        }
+
+        Set<String> skillSet = new HashSet<>();
+
+        Arrays.stream(skills.toLowerCase().split(","))
+                .map(String::trim)
+                .filter(skill -> !skill.isEmpty())
+                .forEach(skillSet::add);
+
+        return skillSet;
+    }
+
+    private int countMatched(
+            Set<String> resumeSkills,
+            Set<String> requiredSkills) {
+
+        int count = 0;
+
+        for (String skill : requiredSkills) {
+
+            if (resumeSkills.contains(skill)) {
+                count++;
+            }
+        }
+
+        return count;
     }
 }

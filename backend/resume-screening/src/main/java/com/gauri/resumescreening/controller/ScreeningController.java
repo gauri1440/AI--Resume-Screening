@@ -6,6 +6,8 @@ import com.gauri.resumescreening.model.ScreeningRequest;
 import com.gauri.resumescreening.model.ScreeningResult;
 import com.gauri.resumescreening.repository.ResumeRepository;
 import com.gauri.resumescreening.service.ResumeScreeningService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +25,7 @@ public class ScreeningController {
         this.resumeRepository = resumeRepository;
     }
 
-    // Screen a Resume sent directly in request
+    // Screen Resume directly from request
     @PostMapping
     public ScreeningResult screenResume(
             @RequestBody ScreeningRequest request) {
@@ -34,7 +36,7 @@ public class ScreeningController {
         );
     }
 
-    // Screen an existing Resume from database
+    // Screen existing Resume from database
     @PostMapping("/{resumeId}")
     public ScreeningResult screenExistingResume(
             @PathVariable Long resumeId,
@@ -45,7 +47,10 @@ public class ScreeningController {
                 .orElse(null);
 
         if (resume == null) {
-            return null;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Resume not found with id: " + resumeId
+            );
         }
 
         return screeningService.screenResume(
