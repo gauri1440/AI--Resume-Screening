@@ -1,25 +1,39 @@
 package com.gauri.resumescreening.model;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
+
 @Entity
 public class Resume {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
     private String name;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
+
+    @NotBlank(message = "Skills are required")
     private String skills;
+
+    @NotBlank(message = "Education is required")
     private String education;
+
+    @Min(value = 0, message = "Experience cannot be negative")
     private int experience;
 
-    // Default Constructor
     public Resume() {
     }
 
-    // Parameterized Constructor
     public Resume(String name, String email, String skills,
                   String education, int experience) {
         this.name = name;
@@ -29,7 +43,13 @@ public class Resume {
         this.experience = experience;
     }
 
-    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -69,12 +89,5 @@ public class Resume {
 
     public void setExperience(int experience) {
         this.experience = experience;
-    }
-    public Long getId() {
-    return id;
-}
-
-    public void setId(Long id) {
-    this.id = id;
     }
 }
