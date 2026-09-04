@@ -88,6 +88,7 @@ body {
 .hero h1 span {
   display: block;
   background: linear-gradient(90deg, #5b4ee8, #8a4fff);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

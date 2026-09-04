@@ -1,4 +1,5 @@
-package com.example.resume_screening.service;
+
+package com.gauri.resumescreening.service;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -17,7 +18,9 @@ public class ResumePdfParser {
             throw new IllegalArgumentException("Resume file is empty");
         }
 
-        if (!file.getContentType().equalsIgnoreCase("application/pdf")) {
+        if (file.getContentType() == null ||
+                !file.getContentType().equalsIgnoreCase("application/pdf")) {
+
             throw new IllegalArgumentException("Only PDF files are allowed");
         }
 
@@ -31,3 +34,4 @@ public class ResumePdfParser {
         }
     }
 }
+

@@ -1,8 +1,10 @@
-package com.example.resume_screening.service;
+
+package com.gauri.resumescreening.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,3 +87,4 @@ public class ResumeTextExtractor {
         return skills;
     }
 }
+

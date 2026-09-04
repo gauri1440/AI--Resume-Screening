@@ -1,4 +1,5 @@
-package com.example.resume_screening.dto;
+
+package com.gauri.resumescreening.service;
 
 import java.util.List;
 
@@ -51,3 +52,4 @@ public class ScreeningUploadResponse {
         return missingSkills;
     }
 }
+

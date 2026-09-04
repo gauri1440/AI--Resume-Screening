@@ -1,8 +1,8 @@
-package com.example.resume_screening.controller;
+package com.gauri.resumescreening.controller;
 
-import com.example.resume_screening.dto.ScreeningUploadResponse;
-import com.example.resume_screening.service.ResumePdfParser;
-import com.example.resume_screening.service.ResumeTextExtractor;
+import com.gauri.resumescreening.service.ResumePdfParser;
+import com.gauri.resumescreening.service.ResumeTextExtractor;
+import com.gauri.resumescreening.service.ScreeningUploadResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,6 @@ public class ScreeningController {
             // 2. Extract candidate information
             String name = textExtractor.extractName(text);
             String email = textExtractor.extractEmail(text);
-
             List<String> candidateSkills =
                     textExtractor.extractSkills(text);
 
@@ -110,3 +109,4 @@ public class ScreeningController {
         }
     }
 }
+
