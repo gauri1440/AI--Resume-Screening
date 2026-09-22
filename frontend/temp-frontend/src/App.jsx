@@ -55,7 +55,7 @@ function App() {
       formData.append("preferredSkills", preferredSkills);
 
       const response = await fetch(
-        "http://localhost:8080/api/screening/upload",
+        "https://ai-resume-screening-backend1.onrender.com/api/screening/upload",
         {
           method: "POST",
           body: formData,
